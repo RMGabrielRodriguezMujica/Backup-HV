@@ -22,7 +22,6 @@ import subprocess
 import serial
 
 # Configura el puerto serial (cambia 'COM3' por el puerto correcto)
-arduino = serial.Serial('COM8', 9600, timeout=1)
 
 # Variable para almacenar el proceso
 proceso = None
@@ -37,7 +36,6 @@ while True:
         if mensaje == "ON":
             if proceso is None:  # Si el proceso no está activo
                 print("Activando script...")
-                proceso = subprocess.Popen(["python", "prueba color 2.py"])
                 print("Script activado.")
             else:
                 print("El script ya está en ejecución.")
