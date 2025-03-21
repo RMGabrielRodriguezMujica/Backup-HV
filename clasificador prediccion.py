@@ -6,9 +6,11 @@ import numpy as np
 import serial
 import time
 #------------------------------------------------
+ser = serial.Serial('COM10', 9600, timeout = 1)
 time.sleep(2)
 #_____________________________________________________
 
+model_dict = pickle.load(open('./model.p', 'rb'))
 model = model_dict['model']
 
 cap = cv2.VideoCapture(0)
@@ -31,6 +33,8 @@ while True:
     ret, frame = cap.read()
 
     H, W, _ = frame.shape
+
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     results = hands.process(frame_rgb)
     if results.multi_hand_landmarks:
@@ -72,6 +76,7 @@ while True:
         T = predicted_character  # Carácter actual
 
         if T != ta:  # Solo envía si es diferente al anterior
+            ser.write(labels_dict[int(prediction[0])].encode('utf-8'))  # Enviar carácter por Serial
             ta = T  # Actualizar el último carácter enviado
             print(T)  # Mostrar el carácter enviado
 
