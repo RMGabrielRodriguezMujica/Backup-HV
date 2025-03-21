@@ -67,7 +67,7 @@ while True:
         if mensaje == "ON":
             if proceso is None:  # Si el proceso no está activo
                 print("Activando script...")
-                proceso = subprocess.Popen([sys.executable, "pruebaColors.py"])  # Ejecuta el script
+                proceso = subprocess.Popen([sys.executable, "clasificador prediccion.py"])  # Ejecuta el script
                 print("Script activado.")
             else:
                 print("El script ya está en ejecución.")
