@@ -5,12 +5,13 @@ import numpy as np
 
 import serial
 import time
+
 #------------------------------------------------
 ser = serial.Serial('COM10', 9600, timeout = 1)
 time.sleep(2)
 #_____________________________________________________
 
-model_dict = pickle.load(open('./model.p', 'rb'))
+model_dict = pickle.load(open('./modelABLEIOU.p', 'rb'))
 model = model_dict['model']
 
 cap = cv2.VideoCapture(0)
@@ -21,9 +22,16 @@ mp_drawing_styles = mp.solutions.drawing_styles
 
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
-labels_dict = {0: 'A', 1: 'B', 2: 'L'}
+#labels_dict = {0: 'A', 1: 'B', 2: 'L'}
+labels_dict = {0: 'A', 1: 'B', 2: 'L', 3: 'E', 4:'I' , 5:'O', 6:'U'}
 
 ta = None  # Almacena el último carácter enviado
+
+# Crear una ventana con nombre antes de establecerla en pantalla completa
+cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
+cv2.setWindowProperty('frame', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+
+
 while True:
 
     data_aux = []
@@ -38,6 +46,17 @@ while True:
 
     results = hands.process(frame_rgb)
     if results.multi_hand_landmarks:
+        ##-----------------------
+        first_hand = results.multi_hand_landmarks[0]  # Solo la primera mano detectada
+
+        mp_drawing.draw_landmarks(
+            frame, first_hand,
+            mp_hands.HAND_CONNECTIONS,
+            mp_drawing_styles.get_default_hand_landmarks_style(),
+            mp_drawing_styles.get_default_hand_connections_style()
+        )
+        #-------------------------
+
         for hand_landmarks in results.multi_hand_landmarks:
             mp_drawing.draw_landmarks(
                 frame,  # image to draw
@@ -60,17 +79,19 @@ while True:
                 data_aux.append(x - min(x_))
                 data_aux.append(y - min(y_))
 
+
+
         x1 = int(min(x_) * W) - 10
         y1 = int(min(y_) * H) - 10
 
         x2 = int(max(x_) * W) - 10
         y2 = int(max(y_) * H) - 10
 
+
+
         prediction = model.predict([np.asarray(data_aux)])
 
         predicted_character = labels_dict[int(prediction[0])] # Obtén el carácter predicho
-
-
 
 
         T = predicted_character  # Carácter actual

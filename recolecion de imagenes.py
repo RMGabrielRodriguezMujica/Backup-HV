@@ -7,13 +7,14 @@ if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)  # Crear la carpeta si no existe
 
 # Definir el número de clases y la cantidad de imágenes por clase
-number_of_classes = 3  # Número total de clases a capturar
-dataset_size = 100  # Cantidad de imágenes por clase
+number_of_classes = 28  # Número total de clases a capturar
+dataset_size = 500  # Cantidad de imágenes por clase
 
 # Inicializar la captura de video desde la cámara web
 cap = cv2.VideoCapture(0)
 
 # Crear carpetas para cada clase dentro del directorio de datos
+#for j in range(24, number_of_classes):
 for j in range(number_of_classes):
     class_dir = os.path.join(DATA_DIR, str(j))
     if not os.path.exists(class_dir):
