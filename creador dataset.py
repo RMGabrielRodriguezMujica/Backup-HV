@@ -86,6 +86,6 @@ for dir_ in os.listdir(DATA_DIR):
             data.append(data_aux)
             labels.append(dir_)
 
-f = open('dataABLEIOU.pickle', 'wb')
+f = open('dataABLEIOU1000.pickle', 'wb')
 pickle.dump({'data': data, 'labels': labels}, f)
 f.close()

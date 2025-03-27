@@ -7,16 +7,23 @@ import serial
 import time
 
 #------------------------------------------------
-ser = serial.Serial('COM10', 9600, timeout = 1)
+#ser = serial.Serial('COM10', 9600, timeout = 1)
 time.sleep(2)
 #_____________________________________________________
 
-model_dict = pickle.load(open('./modelABLEIOU.p', 'rb'))
+model_dict = pickle.load(open('./modelABLEIOU1000.p', 'rb'))
 model = model_dict['model']
 
 cap = cv2.VideoCapture(0)
 
-mp_hands = mp.solutions.hands
+mp_hands = mp.solutions.hands # cpu
+
+hands = mp_hands.Hands(
+    static_image_mode=True,
+    min_detection_confidence=0.3,
+    model_complexity=1  # Usa el modelo más pesado (mejor precisión en GPU)
+)
+
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
@@ -28,8 +35,8 @@ labels_dict = {0: 'A', 1: 'B', 2: 'L', 3: 'E', 4:'I' , 5:'O', 6:'U'}
 ta = None  # Almacena el último carácter enviado
 
 # Crear una ventana con nombre antes de establecerla en pantalla completa
-cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
-cv2.setWindowProperty('frame', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+#cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
+#cv2.setWindowProperty('frame', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
 
 while True:
@@ -43,6 +50,8 @@ while True:
     H, W, _ = frame.shape
 
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    ##############################
+    frame = draw_hand_landmarks(frame, results
 
     results = hands.process(frame_rgb)
     if results.multi_hand_landmarks:
@@ -97,13 +106,13 @@ while True:
         T = predicted_character  # Carácter actual
 
         if T != ta:  # Solo envía si es diferente al anterior
-            ser.write(labels_dict[int(prediction[0])].encode('utf-8'))  # Enviar carácter por Serial
+           # ser.write(labels_dict[int(prediction[0])].encode('utf-8'))  # Enviar carácter por Serial
             ta = T  # Actualizar el último carácter enviado
             print(T)  # Mostrar el carácter enviado
 
 
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
-        #cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3,cv2.LINE_AA)
+        cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3,cv2.LINE_AA)
 
     cv2.imshow('frame', frame)
     cv2.waitKey(1)

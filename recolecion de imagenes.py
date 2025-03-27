@@ -8,7 +8,7 @@ if not os.path.exists(DATA_DIR):
 
 # Definir el número de clases y la cantidad de imágenes por clase
 number_of_classes = 28  # Número total de clases a capturar
-dataset_size = 500  # Cantidad de imágenes por clase
+dataset_size = 1000  # Cantidad de imágenes por clase
 
 # Inicializar la captura de video desde la cámara web
 cap = cv2.VideoCapture(0)
