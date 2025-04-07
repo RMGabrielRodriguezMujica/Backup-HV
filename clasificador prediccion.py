@@ -5,13 +5,15 @@ import numpy as np
 
 import serial
 import time
-
+from dibujador_landmark import draw_hand_landmarks  # Importa el módulo de dibujo
 #------------------------------------------------
 #ser = serial.Serial('COM10', 9600, timeout = 1)
+ser = serial.Serial('COM10', 9600, timeout = 1)
 time.sleep(2)
-#_____________________________________________________
+#__ ---_______________________________________________
 
-model_dict = pickle.load(open('./modelABLEIOU1000.p', 'rb'))
+model_dict = pickle.load(open('./model.p', 'rb'))
+# model_dict = pickle.load(open('./modelABLEIOU1000.p', 'rb'))
 model = model_dict['model']
 
 cap = cv2.VideoCapture(0)
@@ -25,7 +27,13 @@ hands = mp_hands.Hands(
 )
 
 mp_drawing = mp.solutions.drawing_utils
+#
+#mp_drawing_styles = mp.solutions.drawing_styles
+#mp_drawing_styles = draw_hand_landmarksmp_hands = mp.solutions.hands
+mp_hands = mp.solutions.hands
+mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
+
 
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
@@ -35,8 +43,8 @@ labels_dict = {0: 'A', 1: 'B', 2: 'L', 3: 'E', 4:'I' , 5:'O', 6:'U'}
 ta = None  # Almacena el último carácter enviado
 
 # Crear una ventana con nombre antes de establecerla en pantalla completa
-#cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
-#cv2.setWindowProperty('frame', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
+cv2.setWindowProperty('frame', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
 
 while True:
@@ -51,9 +59,13 @@ while True:
 
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     ##############################
-    frame = draw_hand_landmarks(frame, results
+
 
     results = hands.process(frame_rgb)
+
+    frame = draw_hand_landmarks(frame, results)
+
+
     if results.multi_hand_landmarks:
         ##-----------------------
         first_hand = results.multi_hand_landmarks[0]  # Solo la primera mano detectada
@@ -106,7 +118,7 @@ while True:
         T = predicted_character  # Carácter actual
 
         if T != ta:  # Solo envía si es diferente al anterior
-           # ser.write(labels_dict[int(prediction[0])].encode('utf-8'))  # Enviar carácter por Serial
+            ser.write(labels_dict[int(prediction[0])].encode('utf-8'))  # Enviar carácter por Serial
             ta = T  # Actualizar el último carácter enviado
             print(T)  # Mostrar el carácter enviado
 

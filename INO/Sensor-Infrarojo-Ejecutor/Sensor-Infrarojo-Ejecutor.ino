@@ -1,3 +1,4 @@
+
 int led = 13;
 int s = 7; // Sensor Infrarojo d
 bool estado = false;
