@@ -47,6 +47,8 @@ void setup() {
   pinMode(OUT3, INPUT);
   pinMode(OUT2, INPUT);
   pinMode(OUT1, INPUT);
+
+  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
@@ -77,6 +79,9 @@ void loop() {
 
     if (step2_right && digitalRead(OUT1) == 0) {
       Serial.println("OUT1 activado. ¡Dirección marcada: Derecha!");
+      Serial.println("DERECHA");
+      Serial.println("ON");
+      digitalWrite(LED_BUILTIN, 1);
       
       // Reiniciar pasos para la secuencia de derecha
       step4_right = step3_right = step2_right = false;
@@ -100,15 +105,15 @@ void loop() {
 
     if (step3_left && digitalRead(OUT4) == 0) {
       Serial.println("OUT4 activado. ¡Dirección marcada: Izquierda!");
+      Serial.println("IZQUIERDA");
+      Serial.println("OFF");
+      digitalWrite(LED_BUILTIN, 0);
       
       // Reiniciar pasos para la secuencia de izquierda
       step1_left = step2_left = step3_left = false;
     }
   }  
 
-
-
-  
 
   // Mostrar los estados de los sensores en el monitor serial
   /*Serial.print(digitalRead(OUT4));

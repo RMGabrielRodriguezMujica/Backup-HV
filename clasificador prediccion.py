@@ -8,8 +8,8 @@ import time
 from dibujador_landmark import draw_hand_landmarks  # Importa el módulo de dibujo
 #------------------------------------------------
 #ser = serial.Serial('COM10', 9600, timeout = 1)
-ser = serial.Serial('COM10', 9600, timeout = 1)
-time.sleep(2)
+#ser = serial.Serial('COM10', 9600, timeout = 1)
+#time.sleep(2)
 #__ ---_______________________________________________
 
 model_dict = pickle.load(open('./model.p', 'rb'))
@@ -118,7 +118,7 @@ while True:
         T = predicted_character  # Carácter actual
 
         if T != ta:  # Solo envía si es diferente al anterior
-            ser.write(labels_dict[int(prediction[0])].encode('utf-8'))  # Enviar carácter por Serial
+           # ser.write(labels_dict[int(prediction[0])].encode('utf-8'))  # Enviar carácter por Serial
             ta = T  # Actualizar el último carácter enviado
             print(T)  # Mostrar el carácter enviado
 

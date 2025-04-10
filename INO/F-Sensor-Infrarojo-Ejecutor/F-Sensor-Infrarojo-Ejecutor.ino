@@ -5,10 +5,10 @@ bool estado = false;
 int x;
 void setup() {
   // put your setup code here, to run once:
+  Serial.begin(9600); 
 
   pinMode(led, OUTPUT);
   pinMode(s, INPUT);
-  Serial.begin(9600);
   
 }
 

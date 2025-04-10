@@ -80,11 +80,14 @@ void loop() {
     if (step3_right && digitalRead(OUT2) == 0 && !step2_right) {
       step2_right = true;
       Serial.println("OUT2 activado (Derecha)");
+     
     }
 
     if (step2_right && digitalRead(OUT1) == 0) {
       Serial.println("OUT1 activado. ¡Dirección marcada: Derecha!");
       Serial.println("ON");
+      Serial.println("DERECHA");
+      digitalWrite(led, 1);
       // Reiniciar pasos para la secuencia de derecha
       step4_right = step3_right = step2_right = false;
     }
@@ -108,6 +111,8 @@ void loop() {
     if (step3_left && digitalRead(OUT4) == 0) {
       Serial.println("OUT4 activado. ¡Dirección marcada: Izquierda!");
       Serial.println("OFF");
+      Serial.println("IZQUIERDA");
+      digitalWrite(LED_BUILTIN, 0);
       
       // Reiniciar pasos para la secuencia de izquierda
       step1_left = step2_left = step3_left = false;
